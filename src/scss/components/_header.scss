@@ -2,12 +2,20 @@
 
 .header {
   border-bottom: 1px solid $gray-line;
-  padding: 40px 0;
+  padding: 40px 0px 10px 0px;
 
   .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    @media screen and (max-width: 645px) {
+      flex-direction: column;
+
+      .header__cart {
+        margin-top: 15px;
+      }
+    }
   }
 
   &__logo {
