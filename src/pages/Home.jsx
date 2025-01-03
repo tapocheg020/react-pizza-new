@@ -1,19 +1,31 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { SearchContext } from '../App'
 import Categories from '../components/categories/Categories'
-import Pagination from '../components/pagination/pagination'
+import Pagination from '../components/pagination/Pagination'
 import PizzaBlock from '../components/pizzaBlock/PizzaBlock'
 import Skeleton from '../components/pizzaBlock/Skeleton'
 import Sort from '../components/sort/Sort'
+import { setCategoryId } from '../redux/slices/filterSlice'
 
-const Home = ({ searchValue, setSearchValue }) => {
+const Home = () => {
+	const categoryId = useSelector(state => state.filter.categoryId)
+	const dispatch = useDispatch()
+
+	const { searchValue } = useContext(SearchContext)
+
 	const [items, setItems] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
-	const [categoryId, setCategoryId] = useState(0)
+	// const [categoryId, setCategoryId] = useState(0)
 	const [currentPage, setCurrentPage] = useState(1)
 	const [sortType, setSortType] = useState({
 		name: 'популярности',
 		sortProperty: 'rating',
 	})
+
+	const onChangeCategory = id => {
+		dispatch(setCategoryId(id))
+	}
 
 	useEffect(() => {
 		setIsLoading(true)
@@ -37,23 +49,23 @@ const Home = ({ searchValue, setSearchValue }) => {
 	}, [categoryId, sortType, searchValue, currentPage])
 
 	const skeleton = [...new Array(6)].map((_, index) => <Skeleton key={index} />)
-	const pizzas = items.map(obj => <PizzaBlock key={obj.id} {...obj} />)
+	const pizzas =
+		Array.isArray(items) && items.length > 0 ? (
+			items.map(obj => <PizzaBlock key={obj.id} {...obj} />)
+		) : (
+			<p>Таких пиц не существует</p>
+		)
 	return (
 		<>
 			<div className='content__top'>
 				<Categories
 					categoryValue={categoryId}
-					onChangeCategory={id => setCategoryId(id)}
+					onChangeCategory={onChangeCategory}
 				/>
 				<Sort sortValue={sortType} onChangeSort={id => setSortType(id)} />
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
-			<div className='content__items'>
-				{/* {items.map(obj => (
-							<Skeleton key={obj.id} {...obj} />
-						))} */}
-				{isLoading ? skeleton : pizzas}
-			</div>
+			<div className='content__items'>{isLoading ? skeleton : pizzas}</div>
 			<Pagination onChangePage={number => setCurrentPage(number)} />
 		</>
 	)
