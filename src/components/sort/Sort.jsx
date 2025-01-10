@@ -1,23 +1,46 @@
-import React, { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { setSort } from '../../redux/slices/filterSlice'
 
-const Sort = ({ sortValue, onChangeSort }) => {
+export const list = [
+	{ name: 'популярности (DESC)', sortProperty: 'rating' },
+	{ name: 'популярности (ASC)', sortProperty: '-rating' },
+	{ name: 'цене (DESC)', sortProperty: 'price' },
+	{ name: 'цене (ASC)', sortProperty: '-price' },
+	{ name: 'алфавиту (DESC)', sortProperty: 'title' },
+	{ name: 'алфавиту (ASC)', sortProperty: '-title' },
+]
+
+const Sort = () => {
+	const dispatch = useDispatch()
+	const sort = useSelector(state => state.filter.sort)
+	const sortRef = useRef()
+
 	const [visiblePopup, setVisiblePopup] = useState(false)
-	const list = [
-		{ name: 'популярности (DESC)', sortProperty: 'rating' },
-		{ name: 'популярности (ASC)', sortProperty: '-rating' },
-		{ name: 'цене (DESC)', sortProperty: 'price' },
-		{ name: 'цене (ASC)', sortProperty: '-price' },
-		{ name: 'алфавиту (DESC)', sortProperty: 'title' },
-		{ name: 'алфавиту (ASC)', sortProperty: '-title' },
-	]
 
-	const onClickListItem = index => {
-		onChangeSort(index)
+	const onClickListItem = obj => {
+		dispatch(setSort(obj))
 		setVisiblePopup(false)
 	}
 
+	//Сделал по своему, тк patch не может найти у event
+	useEffect(() => {
+		const handleClickOutside = event => {
+			const path = event.composedPath && event.composedPath()
+			if (sortRef.current && !path.includes(sortRef.current)) {
+				setVisiblePopup(false) // Закрываем выпадающий список
+			}
+		}
+
+		// Добавляем обработчик кликов
+		document.body.addEventListener('click', handleClickOutside)
+
+		// Удаляем обработчик кликов
+		return () => document.body.removeEventListener('click', handleClickOutside)
+	}, [])
+
 	return (
-		<div className='sort'>
+		<div ref={sortRef} className='sort'>
 			<div
 				onClick={() => setVisiblePopup(!visiblePopup)}
 				className='sort__label'
@@ -35,7 +58,7 @@ const Sort = ({ sortValue, onChangeSort }) => {
 					/>
 				</svg>
 				<b>Сортировка по:</b>
-				<span>{sortValue.name}</span>
+				<span>{sort.name}</span>
 			</div>
 			{visiblePopup && (
 				<div className='sort__popup'>
@@ -46,7 +69,7 @@ const Sort = ({ sortValue, onChangeSort }) => {
 									key={id}
 									onClick={() => onClickListItem(obj)}
 									className={
-										sortValue.sortProperty === obj.sortProperty ? 'active' : ''
+										sort.sortProperty === obj.sortProperty ? 'active' : ''
 									}
 								>
 									{obj.name}
