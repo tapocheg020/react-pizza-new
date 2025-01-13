@@ -5,6 +5,7 @@ import Cart from './pages/Cart'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import './scss/app.scss'
+import CartItemEmpty from './components/cart/CartItemEmpty'
 //00.00.00 #9
 
 export const SearchContext = createContext('')
@@ -22,6 +23,7 @@ function App() {
 							<Route path='/' element={<Home />} />
 							<Route path='*' element={<NotFound />} />
 							<Route path='/cart' element={<Cart />} />
+							<Route path='/cart-empty' element={<CartItemEmpty />} />
 						</Routes>
 					</div>
 				</div>

@@ -1,3 +1,4 @@
+
 const CartItemEmpty = () => {
 	return (
 		<div class='cart cart--empty'>
@@ -9,7 +10,7 @@ const CartItemEmpty = () => {
 				<br />
 				Для того, чтобы заказать пиццу, перейди на главную страницу.
 			</p>
-			<img src='/img/empty-cart.png' alt='Empty cart' />
+			<img src='/public/img/empty-cart.png' alt='Empty cart' />
 			<a href='/' class='button button--black'>
 				<span>Вернуться назад</span>
 			</a>

@@ -24,6 +24,22 @@ body {
 .content {
 	padding: 40px 0;
 
+	&__error-info {
+		margin: 60px auto;
+		width: 580px;
+		text-align: center;
+		padding: 70px 0;
+
+		h2 {
+			font-size: 32px;
+			font-weight: 800;
+			padding: 20px 0;
+		}
+		p {
+			font-size: 18px;
+		}
+	}
+
 	&__title {
 		margin: 45px 0px 50px 0px;
 	}
@@ -318,7 +334,7 @@ body {
 	}
 
 	&--empty {
-		margin: 0 auto;
+		margin: 80px auto;
 		width: 560px;
 		text-align: center;
 

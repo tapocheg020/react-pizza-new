@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import CartItem from '../components/cart/CartItem'
 import { clearItem } from '../redux/slices/cartSlice'
+import CartItemEmpty from '../components/cart/CartItemEmpty'
 const Cart = () => {
 	const { totalPrice, items } = useSelector(state => state.cart)
 	const dispatch = useDispatch()
@@ -13,6 +14,9 @@ const Cart = () => {
 		if (window.confirm('Ты действительно хош удалить эти чудо пиццы?')) {
 			dispatch(clearItem([]))
 		}
+	}
+	if(!totalPrice) {
+		return <CartItemEmpty />
 	}
 
 	return (
