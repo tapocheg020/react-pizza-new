@@ -1,10 +1,11 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import Search from '../search/Search'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { cartSelector } from '../../redux/slices/cartSlice'
+import Search from '../search/Search'
 
 const Header = () => {
-	const {items, totalPrice} = useSelector(state => state.cart)
+	const { items, totalPrice } = useSelector(cartSelector)
 
 	const totalCount = items.reduce((sum, obj) => sum + obj.count, 0)
 	return (
